@@ -20,7 +20,7 @@ type pbServer struct {
 
 func (s *pbServer) UnaryPrecrux(ctx context.Context, req *pb.PrecruxRequest) (*pb.PrecruxResponse, error) {
 	fmt.Printf("UnaryPrecrux")
-	return &pb.PrecruxResponse{Message: req.Message}, nil
+	return &pb.PrecruxResponse{Message: "hello " + req.Message}, nil
 }
 
 func (c *Chaser) Serve() {
