@@ -41,7 +41,7 @@ var startCmd = &cobra.Command{
 	Args:         cobra.RangeArgs(1, 1),
 	SilenceUsage: true,
 	RunE: func(cmd *cobra.Command, args []string) error {
-		c := &chaser.Chaser{Name: args[0]}
+		c := &chaser.Chaser{Name: args[0], Port: *port}
 		c.Start()
 		return nil
 	},

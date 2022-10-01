@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+option go_package = "github.com/chillyvee/precrux/proto/precrux";
+
+package chillyvee.precrux;
+
+// PrecruxRequest is the request for precrux.
+message PrecruxRequest {
+  string message = 1;
+}
+
+// PrecruxResponse is the response for precrux.
+message PrecruxResponse {
+  string message = 1;
+}
+
+// Precrux is the precrux service.
+service Precrux {
+  // UnaryPrecrux is unary precrux.
+  rpc UnaryPrecrux(PrecruxRequest) returns (PrecruxResponse) {}
+}
