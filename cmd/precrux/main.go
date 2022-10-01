@@ -1,7 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"github.com/chillyvee/precrux/cmd/precrux/cmd"
+)
 
 func main() {
-	fmt.Println("precrux")
+	cmd.Execute()
 }
