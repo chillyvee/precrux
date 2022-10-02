@@ -15,7 +15,6 @@ import (
 )
 
 func (c *Chaser) ProvisionCertificate() {
-	var err error
 	keyExists := true
 	certExists := true
 
@@ -39,27 +38,33 @@ func (c *Chaser) ProvisionCertificate() {
 		panic("invalid configuration")
 	}
 	if keyExists && certExists {
-		c.certBytes, err = os.ReadFile("chaser.crt")
-		if err != nil {
-			panic(err)
-		}
-		c.keyBytes, err = os.ReadFile("chaser.key")
-		if err != nil {
-			panic(err)
-		}
-
+		c.ReadCertificate()
 	}
 
 	if !keyExists && !certExists {
 		c.ProvisionNewCertificate()
+		c.ReadCertificate()
 	}
 
 	fmt.Printf("To add this chaser your snitch, run 'precrux chaser add %s'\n\n", c.Name)
 	fmt.Printf("Then copy+paste the following text into your precrux snitch\n\n")
 	fmt.Printf("%s\n\n\n", c.certBytes)
 }
+func (c *Chaser) ReadCertificate() {
+	var err error
+	c.certBytes, err = os.ReadFile("chaser.crt")
+	if err != nil {
+		panic(err)
+	}
+	c.keyBytes, err = os.ReadFile("chaser.key")
+	if err != nil {
+		panic(err)
+	}
+}
 
 func (c *Chaser) ProvisionNewCertificate() {
+	fmt.Printf("Generating chaser certificate, please wait...\n\n")
+
 	key, err := rsa.GenerateKey(rand.Reader, 4096)
 	if err != nil {
 		panic(err)
@@ -72,7 +77,7 @@ func (c *Chaser) ProvisionNewCertificate() {
 			Bytes: keyBytes,
 		},
 	)
-	fmt.Println(string(keyPEM))
+	// fmt.Println(string(keyPEM))
 	if err = os.WriteFile("chaser.key", keyPEM, 0600); err != nil {
 		panic(err)
 	}
@@ -105,7 +110,7 @@ func (c *Chaser) ProvisionNewCertificate() {
 			Bytes: derBytes,
 		},
 	)
-	fmt.Println(string(certPem))
+	// fmt.Println(string(certPem))
 	if err = os.WriteFile("chaser.crt", certPem, 0600); err != nil {
 		panic(err)
 	}

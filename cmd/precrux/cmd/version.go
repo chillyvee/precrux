@@ -69,7 +69,7 @@ func NewInfo() Info {
 // versionCmd represents the version command
 var versionCmd = &cobra.Command{
 	Use:          "version",
-	Short:        "Version information for horcrux",
+	Short:        "Version information for precrux",
 	SilenceUsage: true,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		bz, err := json.MarshalIndent(NewInfo(), "", "  ")

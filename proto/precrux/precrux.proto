@@ -14,8 +14,23 @@ message PrecruxResponse {
   string message = 1;
 }
 
+// PrecruxWriteFileRequest is the request for precrux.
+message PrecruxWriteFileRequest {
+  string filepath = 1;
+  bytes data = 2;
+  uint32 perm = 3;
+  bool overwrite = 4;
+}
+
+// PrecruxWriteFileResponse is the response for precrux.
+message PrecruxWriteFileResponse {
+  bool success = 1;
+  string message = 2;
+}
+
 // Precrux is the precrux service.
 service Precrux {
   // UnaryPrecrux is unary precrux.
   rpc UnaryPrecrux(PrecruxRequest) returns (PrecruxResponse) {}
+  rpc WriteFile(PrecruxWriteFileRequest) returns (PrecruxWriteFileResponse) {}
 }

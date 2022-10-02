@@ -39,7 +39,7 @@ var startCmd = &cobra.Command{
 	Long: "Start Chaser mode for precrux\n\n" +
 		"[chaser-name] is the name of the horcrux shard server.  Can be a hostname or any other word like 'west-1' or 'server-2'",
 	Args:         cobra.RangeArgs(1, 1),
-	SilenceUsage: true,
+	SilenceUsage: false,
 	RunE: func(cmd *cobra.Command, args []string) error {
 		c := &chaser.Chaser{Name: args[0], Port: *port}
 		c.Start()

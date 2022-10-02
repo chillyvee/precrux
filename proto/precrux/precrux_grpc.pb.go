@@ -24,6 +24,7 @@ const _ = grpc.SupportPackageIsVersion7
 type PrecruxClient interface {
 	// UnaryPrecrux is unary precrux.
 	UnaryPrecrux(ctx context.Context, in *PrecruxRequest, opts ...grpc.CallOption) (*PrecruxResponse, error)
+	WriteFile(ctx context.Context, in *PrecruxWriteFileRequest, opts ...grpc.CallOption) (*PrecruxWriteFileResponse, error)
 }
 
 type precruxClient struct {
@@ -43,12 +44,22 @@ func (c *precruxClient) UnaryPrecrux(ctx context.Context, in *PrecruxRequest, op
 	return out, nil
 }
 
+func (c *precruxClient) WriteFile(ctx context.Context, in *PrecruxWriteFileRequest, opts ...grpc.CallOption) (*PrecruxWriteFileResponse, error) {
+	out := new(PrecruxWriteFileResponse)
+	err := c.cc.Invoke(ctx, "/chillyvee.precrux.Precrux/WriteFile", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // PrecruxServer is the server API for Precrux service.
 // All implementations must embed UnimplementedPrecruxServer
 // for forward compatibility
 type PrecruxServer interface {
 	// UnaryPrecrux is unary precrux.
 	UnaryPrecrux(context.Context, *PrecruxRequest) (*PrecruxResponse, error)
+	WriteFile(context.Context, *PrecruxWriteFileRequest) (*PrecruxWriteFileResponse, error)
 	mustEmbedUnimplementedPrecruxServer()
 }
 
@@ -58,6 +69,9 @@ type UnimplementedPrecruxServer struct {
 
 func (UnimplementedPrecruxServer) UnaryPrecrux(context.Context, *PrecruxRequest) (*PrecruxResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UnaryPrecrux not implemented")
+}
+func (UnimplementedPrecruxServer) WriteFile(context.Context, *PrecruxWriteFileRequest) (*PrecruxWriteFileResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method WriteFile not implemented")
 }
 func (UnimplementedPrecruxServer) mustEmbedUnimplementedPrecruxServer() {}
 
@@ -90,6 +104,24 @@ func _Precrux_UnaryPrecrux_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Precrux_WriteFile_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PrecruxWriteFileRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PrecruxServer).WriteFile(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/chillyvee.precrux.Precrux/WriteFile",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PrecruxServer).WriteFile(ctx, req.(*PrecruxWriteFileRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Precrux_ServiceDesc is the grpc.ServiceDesc for Precrux service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -100,6 +132,10 @@ var Precrux_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UnaryPrecrux",
 			Handler:    _Precrux_UnaryPrecrux_Handler,
+		},
+		{
+			MethodName: "WriteFile",
+			Handler:    _Precrux_WriteFile_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
