@@ -8,8 +8,6 @@ Configuring horcux can be challenging.  Even for adminstrators who are good at t
 
 Precrux allows a controlling node (SNITCH) to configure remote signing servers (CHASER).
 
-For security, copy and paste the certificate from CHASER to the SNITCH to estalibsh a secure channel.
-
 SHUTDOWN THE CHASER on the remote signers once horcrux is configured.  Horcrux runs without the CHASER.
 
 
@@ -21,13 +19,15 @@ Security and management of any key material is outside the scope of this service
 
 This software comes as is, without any warranty or condition, and no contributor will be liable to anyone for any damages related to this software or this license, under any kind of legal claim.
 
-# Important
+# Who should / should NOT use this software
 
-You should be fairly comfortable running tendeermint/cosmos-sdk chains before attempting to use horcrux.  There are known cases of teams double signing for a permanent tombstone during this process.
+You should be fairly comfortable running tendermint/cosmos-sdk chains before attempting to use horcrux.  There are known cases of teams double signing for a permanent tombstone during this process.
 
 We advise against using this configuration tool during a chain halt.  Fix your chain first before attempting any configuration.
 
 Teams who often need to request help from others during setup or upgrade of the chain itself are likely the teams who should NOT be using this software.
+
+Do not use this in production until you have learned how to use it properly in testnet.  If you need help accessing a testnet, contact us or any chain admin.
 
 # Important before configuration:
 
@@ -62,7 +62,7 @@ cd $HOME/.precrux
 Assume you have 3 chasers named "red", "green" and "blue"
 
 
-# On remote (chaser) nodes
+# On remote (CHASER) nodes
 
 Start the chaser on the remote node.  Specify the PORT to listen for incoming precrux information.
 
@@ -75,15 +75,20 @@ cd $HOME/.precrux
 precrux chaser start red --port 5050
 ```
 
-Repeat for chsers named "blue" and "green"
+Repeat for chasers named "blue" and "green"
 
-# On control (snitch) node
+A certificate will print on the screen for you to copy and paste into the local SNITCH.
+
+# On local control (SNITCH) node
 
 Register the chaser locally
 ```
 cd $HOME/.precrux
 precrux remote add red IP:PORT
 ```
+
+
+When prompted, paste the certificate printed upon chaser start.
 
 Repeat for chsers named "blue" and "green"
 
