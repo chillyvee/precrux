@@ -47,7 +47,7 @@ func (cp *ChaserProfile) Save() {
 		log.Fatalf("error: %v", err)
 	}
 
-	if err := os.WriteFile(cp.Filepath(), yamlBytes, 600); err != nil {
+	if err := os.WriteFile(cp.Filepath(), yamlBytes, 0600); err != nil {
 		panic(err)
 	}
 	fmt.Printf("[chaser %s] Profile saved to %s\n", cp.Name, cp.Filepath())
@@ -84,7 +84,7 @@ func (s *Snitch) ReadChaserCertificate(chaserName string) string {
 	certstring := textBuffer.String()
 
 	certfile := fmt.Sprintf("chaser_%s.crt", chaserName)
-	if err := os.WriteFile(certfile, []byte(certstring), 600); err != nil {
+	if err := os.WriteFile(certfile, []byte(certstring), 0600); err != nil {
 		panic(err)
 	}
 

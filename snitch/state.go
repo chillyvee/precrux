@@ -75,7 +75,7 @@ func (s *Snitch) ImportPrivValidatorState() (*FilePVLastSignState, error) {
 		<-time.After(5 * time.Second)
 		pvState.Height = 0
 		pvState.Round = 0
-		pvState.Step = 0
+		pvState.Step = 1
 		return pvState, nil
 	}
 

@@ -121,7 +121,7 @@ func (s *Snitch) SendChainToChaser() {
 	s.Connect()
 	defer s.ChaserConn.Close()
 	for _, co := range s.Config.Cosigners {
-		if co.Name == s.ChaserName {
+		if co.ChaserName == s.ChaserName {
 			s.SendFile("config.yaml", co)
 			s.SendFile("share.json", co)
 			s.SendFile(s.ChaserStatePvsFile(), co)

@@ -46,7 +46,7 @@ func (c *Chaser) ProvisionCertificate() {
 		c.ReadCertificate()
 	}
 
-	fmt.Printf("To add this chaser your snitch, run 'precrux remote add %s'\n\n", c.Name)
+	fmt.Printf("To add this chaser your local snitch, run 'precrux remote add %s'\n\n", c.Name)
 	fmt.Printf("Then copy+paste the following text into your precrux snitch\n\n")
 	fmt.Printf("%s\n\n\n", c.certBytes)
 }

@@ -23,11 +23,11 @@ type pbServer struct {
 
 func (s *pbServer) UnaryPrecrux(ctx context.Context, req *pb.PrecruxRequest) (*pb.PrecruxResponse, error) {
 	fmt.Printf("UnaryPrecrux")
-	return &pb.PrecruxResponse{Message: "hello " + req.Message}, nil
+	return &pb.PrecruxResponse{Message: req.Message}, nil
 }
 
 func (s *pbServer) WriteFile(ctx context.Context, req *pb.PrecruxWriteFileRequest) (*pb.PrecruxWriteFileResponse, error) {
-	fmt.Printf("WriteFile %+q", req)
+	fmt.Printf("WriteFile %s\n", req.Filepath)
 	dir := filepath.Dir(req.Filepath)
 	if _, err := os.Stat(dir); errors.Is(err, os.ErrNotExist) {
 		fmt.Printf("Creating Directory %s\n", dir)
@@ -46,7 +46,7 @@ func (s *pbServer) WriteFile(ctx context.Context, req *pb.PrecruxWriteFileReques
 		fmt.Printf("Error: %q", err)
 		return &pb.PrecruxWriteFileResponse{Success: false, Message: fmt.Sprintf("Write Error %s", err)}, nil
 	}
-	return &pb.PrecruxWriteFileResponse{Success: true, Message: "hello again"}, nil
+	return &pb.PrecruxWriteFileResponse{Success: true, Message: "OK"}, nil
 }
 
 func (c *Chaser) Serve() {

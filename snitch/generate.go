@@ -42,11 +42,10 @@ type DiskConfig struct {
 
 // Precrux Structs
 type ChaserConfig struct {
-	Name        string `json:"name" yaml:"name"`
+	ChaserName  string `json:"chaser-name" yaml:"chaser-name"`
 	P2PListen   string `json:"p2p-listen"  yaml:"p2p-listen"`
 	PrivValAddr string `json:"priv-val-addr" yaml:"priv-val-addr"`
 	DebugAddr   string `json:"debug-addr,omitempty" yaml:"debug-addr,omitempty"`
-	// ChaserAddr  string `json:"chaser-addr" yaml:"chaser-addr"`
 }
 
 type SnitchConfig struct {
@@ -86,24 +85,15 @@ func (s *Snitch) Generate() error {
 func (s *Snitch) GatherCertificates() error {
 	// Gather Chaser Certificates
 	for _, co := range s.Config.Cosigners {
-		cp := ChaserProfile{Name: co.Name}
-		fmt.Printf("[chaser %s] Configuration Load\n", co.Name)
+		cp := ChaserProfile{Name: co.ChaserName}
+		fmt.Printf("[chaser %s] Configuration Load\n", co.ChaserName)
 
 		err := cp.Load()
 		if err != nil || len(cp.Certificate) < 100 {
-			fmt.Printf("[chaser %s] Configuration Error: %s\n", co.Name, err)
-			/*
-				host, port, err := net.SplitHostPort(cp.Addr)
-				if err != nil {
-					panic(err)
-				}
-				fmt.Printf("Missing Certificate: %s\n", crtfile)
-				fmt.Printf("\nTo fix [chaser %s @ %s] run:\n \tprecrux chaser start %s --port %s\n\n", co.Name, host, co.Name, port)
-			*/
+			fmt.Printf("[chaser %s] Configuration Error: %s\n", co.ChaserName, err)
 			return err
 		}
-		fmt.Printf("[chaser %s] Configuration OK\n", co.Name)
-
+		fmt.Printf("[chaser %s] Configuration OK\n", co.ChaserName)
 	}
 	return nil
 }
@@ -168,7 +158,7 @@ func (s *Snitch) CreateChaserConfigs() {
 	*/
 	for shareidx, co := range s.Config.Cosigners {
 		shareID := shareidx + 1
-		fmt.Printf("\n[chaser %s] Creating Config - share-id: %d\n", co.Name, shareID)
+		fmt.Printf("\n[chaser %s] Creating Config - share-id: %d\n", co.ChaserName, shareID)
 		peers := []CosignerPeer{}
 		for remoteidx, rco := range s.Config.Cosigners {
 			if shareidx == remoteidx {
@@ -195,7 +185,7 @@ func (s *Snitch) CreateChaserConfigs() {
 		//fmt.Printf("--- config dump:\n%s\n\n", string(ybytes))
 
 		// Write share config
-		// configFile := fmt.Sprintf("cosigner/%s/config.yaml", co.Name)
+		// configFile := fmt.Sprintf("cosigner/%s/config.yaml", co.ChaserName)
 		configFile := s.ChaserFile(co, "config.yaml")
 		if err := os.WriteFile(configFile, ybytes, 0600); err != nil {
 			fmt.Printf("Unable to Write Cosigner Config %s\n", configFile)
@@ -209,10 +199,10 @@ func (s *Snitch) ChaserFile(co *ChaserConfig, filepath string) string {
 	return fmt.Sprintf("%s/%s", s.ChaserDir(co), filepath)
 }
 func (s *Snitch) ChaserDir(co *ChaserConfig) string {
-	return fmt.Sprintf("%s/cosigner/%s", s.ChainName, co.Name)
+	return fmt.Sprintf("%s/cosigner/%s", s.ChainName, co.ChaserName)
 }
 func (s *Snitch) ChaserStateDir(co *ChaserConfig) string {
-	return fmt.Sprintf("%s/cosigner/%s/state", s.ChainName, co.Name)
+	return fmt.Sprintf("%s/cosigner/%s/state", s.ChainName, co.ChaserName)
 }
 func (s *Snitch) ChaserShareFile(co *ChaserConfig) string {
 	return s.ChaserFile(co, "share.json")
